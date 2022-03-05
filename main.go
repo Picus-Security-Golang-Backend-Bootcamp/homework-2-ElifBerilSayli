@@ -50,11 +50,19 @@ func main() {
 
 	var bookNameSlice []string
 	var bookName string
+
 	// Arguments and operations to list search buy and delete books
 	if args[1] == "list" {
 		bookLib.List(bookStructSlice)
 		return
 	}
+
+	err := checkCommandSize(args)
+	if err != nil {
+		fmt.Printf("error running program: %s \n", err.Error())
+		return
+	}
+
 	if args[1] == "search" {
 		err := checkCommandSize(args)
 		if err != nil {
