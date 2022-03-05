@@ -7,10 +7,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/Picus-Security-Golang-Backend-Bootcamp/homework-2-ElifBerilSayli/BookLib"
+	"github.com/Picus-Security-Golang-Backend-Bootcamp/homework-2-ElifBerilSayli/bookLib"
 )
 
-var bookStructSlice = make([]BookLib.Book, 5)
+var bookStructSlice = make([]bookLib.Book, 5)
 var bookSlice = make([]string, 5)
 var authSlice = make([]string, 5)
 
@@ -39,7 +39,7 @@ func init() {
 	authSlice[4] = "Scott Fitzgerald"
 
 	for i := range bookStructSlice {
-		n := BookLib.NewBook(bookSlice[i], counter, authSlice[i])
+		n := bookLib.NewBook(bookSlice[i], counter, authSlice[i])
 		counter = counter + 1
 		bookStructSlice[i] = n
 	}
@@ -52,7 +52,7 @@ func main() {
 	var bookName string
 	// Arguments and operations to list search buy and delete books
 	if args[1] == "list" {
-		BookLib.List(bookStructSlice)
+		bookLib.List(bookStructSlice)
 		return
 	}
 	if args[1] == "search" {
@@ -64,7 +64,7 @@ func main() {
 				bookNameSlice = append(bookNameSlice, args[i])
 			}
 			bookName = strings.Join(bookNameSlice, " ")
-			BookLib.Search(bookStructSlice, bookName)
+			bookLib.Search(bookStructSlice, bookName)
 		}
 	}
 	if args[1] == "buy" {
@@ -87,7 +87,7 @@ func main() {
 					if err != nil {
 						fmt.Printf("error running program: %s \n", err.Error())
 					} else {
-						BookLib.Buy(bookStructSlice, ıd, numberOfBooksToBuy)
+						bookLib.Buy(bookStructSlice, ıd, numberOfBooksToBuy)
 					}
 				}
 			}
@@ -103,7 +103,7 @@ func main() {
 			if err != nil {
 				fmt.Printf("error running program: %s \n", err.Error())
 			} else {
-				BookLib.Deletion(bookStructSlice, deletionId)
+				bookLib.Deletion(bookStructSlice, deletionId)
 			}
 		}
 
