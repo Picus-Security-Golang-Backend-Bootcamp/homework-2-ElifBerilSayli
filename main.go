@@ -56,13 +56,12 @@ func main() {
 		bookLib.List(bookStructSlice)
 		return
 	}
-
 	err := checkCommandSize(args)
 	if err != nil {
 		fmt.Printf("error running program: %s \n", err.Error())
 		return
 	}
-
+	// Checks whether user search book and operate searching process
 	if args[1] == "search" {
 		err := checkCommandSize(args)
 		if err != nil {
@@ -75,14 +74,12 @@ func main() {
 			bookLib.Search(bookStructSlice, bookName)
 		}
 	}
+	// Checks whether user buy book and operate bought process
 	if args[1] == "buy" {
-
 		err := checkCommandSize(args)
-
 		if err != nil {
 			fmt.Printf("error running program: %s \n", err.Error())
 		} else {
-
 			ıd, err := strconv.Atoi(args[2])
 			if err != nil {
 				fmt.Printf("error running program: %s \n", err.Error())
@@ -101,8 +98,8 @@ func main() {
 			}
 		}
 	}
+	// Checks whether user delete book and operate deletion process
 	if args[1] == "delete" {
-
 		deletionId, err := strconv.Atoi(args[2])
 		if err != nil {
 			fmt.Printf("error running program: %s \n", err.Error())
@@ -118,7 +115,7 @@ func main() {
 	}
 }
 
-//Error handling details
+//func checkCommandSize checks arguments size for error handling.
 func checkCommandSize(args []string) error {
 	if len(args) <= 2 {
 		return ErrInArgument
@@ -126,6 +123,7 @@ func checkCommandSize(args []string) error {
 	return nil
 }
 
+//func checkIdValidError checks whether id is valid or not.
 func checkIdValidError(id int) error {
 	for i := range bookStructSlice {
 		if bookStructSlice[i].Id == id {
