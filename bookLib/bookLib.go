@@ -7,14 +7,17 @@ import (
 	"strings"
 )
 
-//Struct operations
+//Interface for deletable book
 type Deletable interface {
 	Delete(a int) []Book
 }
+
+//Struct operations
 type AuthorInfo struct {
 	Name  string
 	Birth string
 }
+
 type Book struct {
 	Id          int
 	BookName    string
@@ -27,7 +30,7 @@ type Book struct {
 	IsDeleted bool
 }
 
-// Book struct constructor
+// Construction of new book
 func NewBook(bookName string, bookId int, authSlice string) Book {
 	p := new(Book)
 	p.Id = bookId
@@ -39,7 +42,7 @@ func NewBook(bookName string, bookId int, authSlice string) Book {
 	p.StockCode = "book" + strconv.Itoa(p.ISBNno)
 	p.Name = authSlice
 	p.Birth = "1980"
-	if p.Id%2 == 0 {
+	if bookId%2 == 0 {
 		p.IsDeleted = true
 	} else {
 		p.IsDeleted = false
@@ -48,14 +51,29 @@ func NewBook(bookName string, bookId int, authSlice string) Book {
 }
 
 //Function to calculate stock number
-func (book Book) Stock(stockNo int) int {
-	return book.StockNumber - stockNo
+func (book Book) StockCalculation(numberOfBooksToBuy int) {
+	if book.IsDeleted == false {
+		if book.StockNumber >= numberOfBooksToBuy {
+			newStock := book.StockNumber - numberOfBooksToBuy
+			fmt.Printf("Stock Number: Old:%d New:%d\n ", book.StockNumber, newStock)
+			book.StockNumber = newStock
+		} else {
+			fmt.Printf(" Inadequate Stock: You have to decrease number of books to buy \n")
+		}
+	} else {
+		fmt.Printf(" The book is already deleted \n")
+	}
 }
 
 //Delete book which has specific ıd from book slice
-func (book Book) Delete(index int, bookSlice []Book) {
-	bookSlice = append(bookSlice[:index], bookSlice[index+1:]...)
-	fmt.Println("New length", len(bookSlice))
+func (book Book) DeleteBook(index int, bookSlice []Book) {
+	if book.IsDeleted == false {
+		book.IsDeleted = true
+		bookSlice = append(bookSlice[:index], bookSlice[index+1:]...)
+		fmt.Println("Successful deletion. New length", len(bookSlice))
+	} else {
+		fmt.Println("Book is already deleted")
+	}
 }
 
 //Listing operations
@@ -67,6 +85,7 @@ func List(bookStruct []Book) {
 
 //Searching book with book name, sku number or author name
 func Search(bookStruct []Book, searching string) {
+
 	fmt.Printf("Searching Results: \n")
 	tempSearching := strings.ToLower(searching)
 
@@ -93,7 +112,7 @@ func Deletion(bookStruct []Book, ıd int) {
 	for _, v := range bookStruct {
 		if v.Id == ıd {
 			idCheck = true
-			v.Delete(counter, bookStruct)
+			v.DeleteBook(counter, bookStruct)
 			return
 		}
 		counter = counter + 1
@@ -111,14 +130,8 @@ func Buy(bookStruct []Book, ıd int, numberOfBooksToBuy int) {
 	for _, v := range bookStruct {
 		if v.Id == ıd {
 			idCheck = true
-			if v.StockNumber >= numberOfBooksToBuy {
-				newStock := v.Stock(numberOfBooksToBuy)
-				fmt.Printf("ID: %d - Stock Number: Old:%d New:%d\n ", ıd, v.StockNumber, newStock)
-				v.StockNumber = newStock
-				return
-			} else {
-				fmt.Printf(" Inadequate Stock: You have to decrease number of books to buy \n")
-			}
+			v.StockCalculation(numberOfBooksToBuy)
+			return
 		}
 	}
 	if idCheck == false {
